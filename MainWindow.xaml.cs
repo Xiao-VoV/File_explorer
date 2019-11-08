@@ -27,7 +27,7 @@ namespace 文件浏览
         }
 
 
-        FolderBrowserDialog m_Dialog = new FolderBrowserDialog();   //定义一个打开文件夹的对
+        FolderBrowserDialog m_Dialog = new FolderBrowserDialog();   //new一个文件夹
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DialogResult result = m_Dialog.ShowDialog();
@@ -42,23 +42,64 @@ namespace 文件浏览
         {
             textbox2.Text = "";
             string m_Dir = m_Dialog.SelectedPath.Trim();
-            string[] files = System.IO.Directory.GetFiles(m_Dir, "*.*");     //获取m_Dir目录下的所有文件
-            foreach (string s in files)           //循环输出结果
+
+            if (m_Dir.Length != 0)    //判断用户是否选择了一个文件夹
             {
-                System.IO.FileInfo fi = null;
-                try
+                string[] files = System.IO.Directory.GetFiles(m_Dir, "*.*");     //获取m_Dir目录下的所有文件
+                foreach (string s in files)           //循环输出结果
                 {
-                    fi = new System.IO.FileInfo(s);  //将文件依次赋给fi
+                    System.IO.FileInfo fi = null;
+                    try
+                    {
+                        fi = new System.IO.FileInfo(s);  //将文件依次赋给fi
+                    }
+                    catch (System.IO.FileNotFoundException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        continue;
+                    }
+                    textbox2.Text += m_Dir + "\\" + fi.Name;
+                    textbox2.Text += Environment.NewLine;
                 }
-                catch (System.IO.FileNotFoundException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    continue;
-                }
-                textbox2.Text += m_Dir + "\\" + fi.Name;
-                textbox2.Text += Environment.NewLine;
+            }
+            else
+            {
+                textbox2.Text += "请先选择一个文件夹";
             }
         }
 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            textbox2.Text = "";
+            string m_Dir = m_Dialog.SelectedPath.Trim();
+
+            if (m_Dir.Length != 0)    //判断用户是否选择了一个文件夹
+            {
+                string[] files = System.IO.Directory.GetDirectories(m_Dir, "*.*");     //获取m_Dir目录下的所有子文件夹
+                foreach (string s in files)           //循环输出结果
+                {
+                    System.IO.FileInfo fi = null;
+                    try
+                    {
+                        fi = new System.IO.FileInfo(s);  //将文件依次赋给fi
+
+
+
+                    }
+                    catch (System.IO.FileNotFoundException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        continue;
+                    }
+
+                    textbox2.Text += m_Dir + "\\" + fi.Name;
+                    textbox2.Text += Environment.NewLine;
+                }
+            }
+            else
+            {
+                textbox2.Text += "请先选择一个文件夹";
+            }
+        }
     }
 }
