@@ -1,4 +1,4 @@
-# C-File_explorer
+# C# File_explorer
 A smiple C# file explorer
 
 
